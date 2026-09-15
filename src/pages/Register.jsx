@@ -1,0 +1,9 @@
+import { useState } from 'react'
+import { register } from '../services/auth'
+
+export default function Register() {
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '', role: 'BUYER' })
+  const [error, setError] = useState('')
+  const submit = async (event) => { event.preventDefault(); if (form.password !== form.confirmPassword) { setError('Passwords do not match.'); return } try { await register(form) } catch { setError('Registration could not be completed. Please try again.') } }
+  return <main className="auth-page"><div className="auth-card panel"><span className="brand-mark">V</span><p className="eyebrow">JOIN THE TRUST LAYER</p><h1>Create your account.</h1><p>Buy, sell, and transfer digital value with clarity.</p><form onSubmit={submit}><label>Full name<input required value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></label><label>Email address<input type="email" required value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label><div className="form-grid"><label>Password<input type="password" required value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /></label><label>Confirm password<input type="password" required value={form.confirmPassword} onChange={(event) => setForm({ ...form, confirmPassword: event.target.value })} /></label></div><label>Account type<select value={form.role} onChange={(event) => setForm({ ...form, role: event.target.value })}><option value="BUYER">Buyer</option><option value="SELLER">Seller</option><option value="BOTH">Buyer & seller</option></select></label>{error && <div className="form-error">{error}</div>}<button className="primary-button">Create account <span>→</span></button></form><small>Already have an account? <a href="/login">Sign in</a></small></div></main>
+}
